@@ -3,20 +3,24 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MeterHistoryController;
 
-// Home
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('meter_histories.index');
 });
 
-// MeterHistories CRUD
-Route::get('/meter-histories', [MeterHistoryController::class, 'index'])->name('meter_histories.index');
-Route::get('/meter-histories/{meter_history}/edit', [MeterHistoryController::class, 'edit'])->name('meter_histories.edit');
-Route::put('/meter-histories/{meter_history}', [MeterHistoryController::class, 'update'])->name('meter_histories.update');
-Route::delete('/meter-histories/{meter_history}', [MeterHistoryController::class, 'destroy'])->name('meter_histories.destroy');
+
+// Route::get('/meter_histories', [MeterHistoryController::class, 'index'])->name('meter_histories.index');
+// Route::get('/meter_histories/create', [MeterHistoryController::class, 'create'])->name('meter_histories.create');
+// Route::post('/meter_histories', [MeterHistoryController::class, 'store'])->name('meter_histories.store');
+// Route::get('/meter_histories/{meterHistory}', [MeterHistoryController::class, 'show'])->name('meter_histories.show');
+// Route::get('/meter_histories/{meterHistory}/edit', [MeterHistoryController::class, 'edit'])->name('meter_histories.edit');
+// Route::put('/meter_histories/{meterHistory}', [MeterHistoryController::class, 'update'])->name('meter_histories.update');
+// Route::delete('/meter_histories/{meterHistory}', [MeterHistoryController::class, 'destroy'])->name('meter_histories.destroy');
+
+Route::resource('meter_histories', MeterHistoryController::class);
 
 // Import routes
-Route::get('/meter-histories/import', [MeterHistoryController::class, 'create'])->name('meter_histories.import'); // Show import form
-Route::post('/meter-histories/import', [MeterHistoryController::class, 'store'])->name('meter_histories.import.store'); // Handle file upload
-
-// Download error file
-Route::get('/meter-histories/errors/{file}', [MeterHistoryController::class, 'downloadErrorFile'])->name('meter_histories.downloadErrors');
+Route::post('/meter_histories/import', [MeterHistoryController::class, 'importStore'])
+     ->name('meter_histories.import.store');
+     
+Route::get('/meter_histories/export/template', [MeterHistoryController::class, 'exportTemplate'])
+     ->name('meter_histories.export.template');
