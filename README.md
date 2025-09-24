@@ -63,15 +63,15 @@ resources/views/
 - Real-time success/error notifications
 
 ## 🔧 API Endpoints
-- `GET/POST /meter-histories` - List/Create records
-- `GET/PUT/DELETE /meter-histories/{id}` - Read/Update/Delete
-- `POST /meter-histories/import` - Bulk import
-- `GET /meter-histories/export-template` - Download template
 
-## 🧪 Testing
-```bash
-php artisan test
-```
+- `GET /meter_histories` – List all records  
+- `POST /meter_histories` – Create a new record  
+- `GET /meter_histories/{id}` – View a single record  
+- `PUT /meter_histories/{id}` – Update a record  
+- `DELETE /meter_histories/{id}` – Delete a record  
+
+- `POST /meter_histories/import` – Bulk import records from file  
+- `GET /meter_histories/download-sample` – Download sample template file  
 
 ##  Support
 

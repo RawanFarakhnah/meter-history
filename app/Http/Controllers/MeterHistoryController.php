@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\MeterHistory;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\MeterHistoriesImport;
+use Illuminate\Support\Facades\DB;
 
 class MeterHistoryController extends Controller
 {
@@ -121,27 +122,37 @@ class MeterHistoryController extends Controller
     }
 
     // Import records from Excel/CSV
-    public function import(Request $request)
-    {
-        $request->validate([
-            'file' => 'required|file|mimes:xlsx,xls,csv|max:10240', // 10MB max
-        ]);
-    
-        try {
-            $import = new MeterHistoriesImport();
-            
-            Excel::import($import, $request->file('file'));
-            
-            $importedCount = $import->getRowCount();
-    
-            return redirect()->route('meter_histories.index')
-                ->with('success', "Successfully imported {$importedCount} records.");
-                
-        } catch (\Exception $e) {
-            return redirect()->route('meter_histories.index')
-                ->with('error', 'Error importing file: ' . $e->getMessage());
+   public function import(Request $request)
+   {
+    $request->validate([
+        'file' => 'required|file|mimes:xlsx,xls,csv|max:10240',
+    ]);
+
+    DB::beginTransaction();
+
+    try {
+        // Handle overwrite option
+        if ($request->has('overwrite') && $request->boolean('overwrite')) {
+            MeterHistory::truncate();
         }
+
+        $import = new MeterHistoriesImport();
+        
+        Excel::import($import, $request->file('file'));
+        
+        $importedCount = $import->getRowCount();
+
+        DB::commit();
+        
+        return redirect()->route('meter_histories.index')
+            ->with('success', "Successfully imported {$importedCount} records.");
+            
+    } catch (\Exception $e) {
+        DB::rollBack();
+        return redirect()->route('meter_histories.index')
+            ->with('error', 'Error importing file: ' . $e->getMessage());
     }
+   }
     
     // Download sample template
     public function downloadSample()
