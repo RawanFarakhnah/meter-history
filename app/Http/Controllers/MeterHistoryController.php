@@ -120,4 +120,38 @@ class MeterHistoryController extends Controller
             ->with('success', 'Meter history record deleted successfully.');
     }
 
+    // Import records from Excel/CSV
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|file|mimes:xlsx,xls,csv|max:10240', // 10MB max
+        ]);
+    
+        try {
+            $import = new MeterHistoriesImport();
+            
+            Excel::import($import, $request->file('file'));
+            
+            $importedCount = $import->getRowCount();
+    
+            return redirect()->route('meter_histories.index')
+                ->with('success', "Successfully imported {$importedCount} records.");
+                
+        } catch (\Exception $e) {
+            return redirect()->route('meter_histories.index')
+                ->with('error', 'Error importing file: ' . $e->getMessage());
+        }
+    }
+    
+    // Download sample template
+    public function downloadSample()
+    {
+        $filePath = storage_path('app/samples/meter_history_template.xlsx');
+    
+        if (!file_exists($filePath)) {
+            return redirect()->back()->with('error', 'Sample file not found.');
+        }
+    
+        return response()->download($filePath, 'meter_history_template.xlsx');
+    }
 }

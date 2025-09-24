@@ -152,6 +152,27 @@
         if (currentSort) {
             $(`[data-sort="${currentSort}"]`).addClass(currentDirection);
         }
+
+        // Import form handling
+        $('#importForm').on('submit', function(e) {
+            const fileInput = $('#importFile')[0];
+            if (fileInput.files.length === 0) {
+                e.preventDefault();
+                alert('Please select a file to import.');
+                return false;
+            }
+            
+            const file = fileInput.files[0];
+            const fileSize = file.size / 1024 / 1024; // MB
+            if (fileSize > 10) {
+                e.preventDefault();
+                alert('File size must be less than 10MB.');
+                return false;
+            }
+            
+            // Show loading state
+            $('.btn-success', this).html('<i class="bi bi-arrow-repeat spinner"></i> Importing...').prop('disabled', true);
+        });
     });
 </script>
 @endpush

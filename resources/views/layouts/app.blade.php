@@ -198,6 +198,26 @@
             content: "↓";
             opacity: 1;
         }
+
+        .spinner {
+           animation: spin 1s linear infinite;
+         }
+         
+         @keyframes spin {
+             from { transform: rotate(0deg); }
+             to { transform: rotate(360deg); }
+         }
+         
+         .import-sample {
+             background-color: #f8f9fa;
+             border-radius: 6px;
+             padding: 10px 15px;
+             margin: 15px 0;
+         }
+         
+         .import-sample i {
+             color: var(--primary-color);
+         }
     </style>
 </head>
 <body class="bg-light">
