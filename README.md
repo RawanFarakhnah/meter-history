@@ -73,6 +73,10 @@ resources/views/
 - `POST /meter_histories/import` – Bulk import records from file  
 - `GET /meter_histories/download-sample` – Download sample template file  
 
+## 📹 Demo
+
+[**→ Watch Demo Video**](https://drive.google.com/drive/folders/1jfZI3_O1gXIvl1zfLq2L7dVu-rAtAp8u?usp=sharing)
+
 ##  Support
 
 For any inquiries or feedback, feel free to reach out:
